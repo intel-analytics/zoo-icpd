@@ -101,7 +101,8 @@ From the output of above command, you can find the NodePort of the service. You 
 chmod +x cmg.bin && ./cmg.bin -p Intel -s analytics-zoo-analytics-zoo -n zen -v 0.5.1 -u /tree?token=1234qwer
 ```
 Then you'll get a config map yaml file.
-2.Use the generated config map in the following commmand on the Cloud Pak for Data Cluster:
+
+2. Use the generated config map in the following commmand on the Cloud Pak for Data Cluster:
 ```bash
 kubectl create -f 
 ```
@@ -110,7 +111,7 @@ kubectl create -f
 If you want to disable the Analytics Zoo add-on in your Cloud Pak for Data cluster, please do the following steps:
 
 ## Using Analytics Zoo
-After you install the Analytics Zoo add-on, you can open web browser, go to http://<MASTER_1_IP>:<port_number>/tree?token=1234qwer to access the Jupyter notebook with analytics zoo. The port number is the NodePort number. 
+After you enable the Analytics Zoo add-on, you can click "Open" link in the Analytics Zoo Add-on page, then you'll see the Jupyter notebook with analytics zoo. 
 
 You can find many use cases/examples under current directory. Click one example and follow the README to open one notebook to run. 
 
