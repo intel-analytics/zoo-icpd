@@ -94,8 +94,7 @@ kubectl describe svc analytics-zoo-analytics-zoo -n zen
 ```
 From the output of above command, you can find the NodePort of the service. You can use this port to access analytics zoo service in web browser. 
 
-## **Enable/Disable Analytics Zoo add-on**
-### Enable Analytics Zoo add-on
+## **Enable Analytics Zoo Add-on**
 1. Create a configmap file using the cmg.bin file from the link(<binary_url>) provided by running the following command:
 ```bash
 chmod +x cmg.bin && ./cmg.bin -p Intel -s analytics-zoo-analytics-zoo -n zen -v 0.5.1 -u /tree?token=1234qwer
@@ -107,8 +106,6 @@ Then you'll get a config map yaml file.
 kubectl create -f 
 ```
 3. Verify if the Analytics Zoo add-on tile is enabled on the Cloud Pak for Data UI with 'Open' link and also the version number is 0.5.1.
-### Disable Analytics Zoo add-on
-If you want to disable the Analytics Zoo add-on in your Cloud Pak for Data cluster, please do the following steps:
 
 ## Using Analytics Zoo
 After you enable the Analytics Zoo add-on, you can click "Open" link in the Analytics Zoo Add-on page, then you'll see the Jupyter notebook with analytics zoo. 
@@ -119,7 +116,10 @@ Or you can create your own notebook with Analytics Zoo APIs to do your deep lear
 
 To get the detail information of how to use analytics zoo, please check [Analytics Zoo documentation](https://analytics-zoo.github.io)
 
-## Uninstalling the chart
+## **Disable Analytics Zoo Add-on**
+If you want to disable the Analytics Zoo add-on in your Cloud Pak for Data cluster, please do the following steps:
+
+## **Uninstall Analytics Zoo Add-on**
 To uninstall/delete the analytics-zoo deployment:
 ```bash
 helm delete --purge analytics-zoo --tls
