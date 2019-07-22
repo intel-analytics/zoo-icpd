@@ -9,7 +9,7 @@ PullPolicy: IfNotPresent
 Replicas: 1
 Component: "analytics-zoo"
 Cpu: "4"
-Memory: "40G"
+Memory: "20G"
 ServicePort: 8888
 ContainerPort: 8888
 ServiceType: NodePort
