@@ -45,17 +45,25 @@ kubectl describe svc analytics-zoo-analytics-zoo -n zen
 From the output of above command, you can find the NodePort of the service. You can use this port to access analytics zoo service in web browser. 
 
 ## **Enable Analytics Zoo Add-on**
-1. Create a configmap file using the cmg.bin file from the link(<binary_url>) provided by running the following command:
+1. Download cmg.bin file from IBM website:
+
+Navigate to this link, and login as a customer: https://www.ibm.com/software/passportadvantage/pao_customer.html
+   
+For IBM Cloud Pak for Data Enterprise Edition, search for part number CC2HNEM and download file
+
+For IBM Cloud Pak for Data Cloud Native Edition, search part number CC2HVEN and download file
+
+2. Create a configmap file using the cmg.bin file by running the following command:
 ```bash
 chmod +x cmg.bin && ./cmg.bin -p Intel -s analytics-zoo-analytics-zoo -n zen -v 0.5.1 -u /tree?token=1234qwer
 ```
 Then you'll get a config map yaml file.
 
-2. Use the generated config map in the following commmand on the Cloud Pak for Data Cluster:
+3. Use the generated config map in the following commmand on the Cloud Pak for Data Cluster:
 ```bash
 kubectl create -f 
 ```
-3. Verify if the Analytics Zoo add-on tile is enabled on the Cloud Pak for Data UI with 'Open' link and also the version number is 0.5.1.
+4. Verify if the Analytics Zoo add-on tile is enabled on the Cloud Pak for Data UI with 'Open' link and also the version number is 0.5.1.
 
 ## Using Analytics Zoo
 After you enable the Analytics Zoo add-on, you can click "Open" link in the Analytics Zoo Add-on page, then you'll see the Jupyter notebook with analytics zoo. 
