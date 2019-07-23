@@ -24,62 +24,12 @@ Follow the steps to have the Analytics Zoo up and running on your cluster.
 ```
 ssh root@<cloud-pak-for-data-cluster-master-node>
 ```
-2. Edit your /etc/hosts file on your system (Linux/MacOS) or equivalent (Windows) to add a DNS entry for the Cloud Pak for Data cluster you'll be connecting to (this is needed for the Docker steps below):
-```bash
-<IP to your Cloud Pak for Data cluster provided by your system administrator> mycluster.icp
-Example:
-169.55.96.201 mycluster.icp
-```
-3. Ensure that you have the correct Kubectl, Helm, Cloudctl, and Docker versions that you have downloaded directly from the Cloud Pak for Data environment.
-```
-If you haven't done so already, get the kubectl/helm/cloudctl binaries corresponding to your platform. Here are the versions used to validate these instructions:
-Kubectl v1.11.1
-Helm v2.9.1
-Cloudctl v3.1.0-715+e4d4ee1d28cc2a588dabc0f54067841ad6c36ec9
-Docker v18.06.1-ce
-Those binaries can be downloaded from the Cloud Pak for Data cluster itself at:
-<HTTPS address of your ICP4D cluster provided by your system administrator>:8443/api/cli/
-Please refer to the ICP4D command line documentation for more information on those.
-```
-4. Edit your Docker configuration to allow the push to insecure registries:
-
-* If using Linux, edit /etc/docker/daemon.json and add :
-```bash
-{ "insecure-registries" : ["mycluster.icp:8500"]} 
-```
-
-* If using Mac/Windows (with use of Docker Desktop):
-
-    a. Find the Docker icon in the system status bar and click on the Preferences menu entry.
-
-    b. Go to the Daemon tab and find the Insecure Registries entry list.
-    
-    c. Create an entry for mycluster.icp:8500
-    
-    d. Restart the Docker Daemon.
-* NOTE: It isn't recommended to edit Docker config files manually when on Mac/Windows. It is recommended to use Docker Desktop.
-
-5. From your terminal, pull the Analytics Zoo image form Dockerhub with:
-```bash
-docker pull intelanalytics/analytics-zoo:0.5.1-2.2.1-0.8.0-py3
-```
-6. Push the docker image from your node to the docker registry using the following commands:
-
-    a. Tag the image
-    ```bash
-    docker tag intelanalytics/analytics-zoo:0.5.1-2.2.1-0.8.0-py3 mycluster.icp:8500/zen/intelanalytics/analytics-zoo:0.5.1-2.2.1-0.8.0-py3
-    ```
-    b. Push the image to the private image registry.
-    ```bash
-    docker push mycluster.icp:8500/zen/intelanalytics/analytics-zoo:0.5.1-2.2.1-0.8.0-py3
-    ```
-
-7. Clone the github repository intel-analytics/zoo-icpd to receive a copy of the helmchart. Browse to the helm charts directory.
+2. Clone the github repository intel-analytics/zoo-icpd to receive a copy of the helmchart. Browse to the helm charts directory.
 ```bash
 git clone https://github.com/intel-analytics/zoo-icpd.git
 cd zoo-icpd/helmchart/analytics-zoo
 ```
-8. Install the helmchart archive:
+3. Install the helmchart archive:
 ```bash
 helm install . --name analytics-zoo --namespace zen --tls
 ```
