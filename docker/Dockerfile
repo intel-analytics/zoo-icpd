@@ -65,4 +65,12 @@ RUN chmod a+x /opt/work/download-analytics-zoo.sh && \
     chmod a+x /opt/work/start-jupyter.sh
 RUN /opt/work/download-analytics-zoo.sh
 
+RUN git config --global http.proxy $http_proxy && \
+    git config --global https.proxy $https_proxy
+
+RUN cd /opt/work && \
+    git clone https://github.com/intel-analytics/zoo-icpd.git && \
+    cp zoo-icpd/simple-nn-in-zoo.ipynb ${ANALYTICS_ZOO_HOME}/apps/ && \
+    rm -rf zoo-icpd
+
 CMD ["/opt/work/start-jupyter.sh"]
