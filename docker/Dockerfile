@@ -27,12 +27,18 @@ ARG SPARK_VERSION=2.3.1
 ARG RUNTIME_SPARK_MASTER=local[4]
 ARG RUNTIME_DRIVER_CORES=4
 ARG RUNTIME_DRIVER_MEMORY=20g
+ARG RUNTIME_EXECUTOR_CORES=4
+ARG RUNTIME_EXECUTOR_MEMORY=20g
+ARG RUNTIME_TOTAL_EXECUTOR_CORES=4
 ENV ANALYTICS_ZOO_VERSION           ${ANALYTICS_ZOO_VERSION}
 ENV SPARK_VERSION                   ${SPARK_VERSION}
 ENV BIGDL_VERSION                   ${BIGDL_VERSION}
+ENV RUNTIME_SPARK_MASTER            ${RUNTIME_SPARK_MASTER}
 ENV RUNTIME_DRIVER_CORES            ${RUNTIME_DRIVER_CORES}
 ENV RUNTIME_DRIVER_MEMORY           ${RUNTIME_DRIVER_MEMORY}
-#ENV RUNTIME_TOTAL_EXECUTOR_CORES    ${RUNTIME_TOTAL_EXECUTOR_CORES}
+ENV RUNTIME_EXECUTOR_CORES          ${RUNTIME_EXECUTOR_CORES}
+ENV RUNTIME_EXECUTOR_MEMORY         ${RUNTIME_EXECUTOR_MEMORY}
+ENV RUNTIME_TOTAL_EXECUTOR_CORES    ${RUNTIME_TOTAL_EXECUTOR_CORES}
 ENV SPARK_HOME                      /opt/work/spark-${SPARK_VERSION}
 ENV ANALYTICS_ZOO_HOME              /opt/work/analytics-zoo-${ANALYTICS_ZOO_VERSION}
 ENV JAVA_HOME                       /opt/jdk
@@ -60,17 +66,21 @@ RUN wget https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SP
     rm spark-${SPARK_VERSION}-bin-hadoop2.7.tgz
 
 ADD ./download-analytics-zoo.sh /opt/work
-ADD ./start-jupyter.sh /opt/work
+ADD ./start-notebook.sh /opt/work
+
 RUN chmod a+x /opt/work/download-analytics-zoo.sh && \
-    chmod a+x /opt/work/start-jupyter.sh
+    chmod a+x /opt/work/start-notebook.sh
 RUN /opt/work/download-analytics-zoo.sh
 
-RUN git config --global http.proxy $http_proxy && \
-    git config --global https.proxy $https_proxy
+RUN chmod -R 777 /opt/work
 
-RUN cd /opt/work && \
-    git clone https://github.com/intel-analytics/zoo-icpd.git && \
-    cp zoo-icpd/simple-nn-in-zoo.ipynb ${ANALYTICS_ZOO_HOME}/apps/ && \
-    rm -rf zoo-icpd
+RUN groupadd -g 999 zoo_user && \
+    useradd -r -u 999 -g zoo_user zoo_user
 
-CMD ["/opt/work/start-jupyter.sh"]
+RUN mkdir /home/zoo_user && \
+    chown zoo_user /home/zoo_user && \
+    chgrp zoo_user /home/zoo_user
+
+USER zoo_user
+
+CMD ["/opt/work/start-notebook.sh"]

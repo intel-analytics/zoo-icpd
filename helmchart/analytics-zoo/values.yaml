@@ -4,7 +4,7 @@
 
 Name: analytics-zoo
 Image: "intelanalytics/analytics-zoo"
-ImageTag: "0.5.1-2.2.1-0.8.0-py3"
+ImageTag: "0.5.1-2.3.1-0.8.0-py3-icpd"
 PullPolicy: IfNotPresent
 Replicas: 1
 Component: "analytics-zoo"
@@ -33,7 +33,7 @@ Ingress:
   #   - example.local
 AnalyticsZooVersion: 0.5.1
 BigDLVesion: 0.8.0
-SparkVersion: 2.2.1
+SparkVersion: 2.3.1
 SparkMaster: local[*]
 DriverCores: 4
 DriverMem: 20g
