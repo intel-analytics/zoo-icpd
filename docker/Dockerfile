@@ -67,20 +67,20 @@ RUN wget https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SP
 
 ADD ./download-analytics-zoo.sh /opt/work
 ADD ./start-notebook.sh /opt/work
+ADD ./start-notebook-with-user.sh /opt/work
 
 RUN chmod a+x /opt/work/download-analytics-zoo.sh && \
-    chmod a+x /opt/work/start-notebook.sh
+    chmod a+x /opt/work/start-notebook.sh && \
+    chmod a+x /opt/work/start-notebook-with-user.sh
+
 RUN /opt/work/download-analytics-zoo.sh
 
-RUN chmod -R 777 /opt/work
+RUN chmod -R g=u /opt/work
 
-RUN groupadd -g 999 zoo_user && \
-    useradd -r -u 999 -g zoo_user zoo_user
+RUN chmod g=u /etc/passwd
 
-RUN mkdir /home/zoo_user && \
-    chown zoo_user /home/zoo_user && \
-    chgrp zoo_user /home/zoo_user
+RUN chmod g=u /home
 
-USER zoo_user
+USER 10001
 
-CMD ["/opt/work/start-notebook.sh"]
+CMD ["/opt/work/start-notebook-with-user.sh"]
