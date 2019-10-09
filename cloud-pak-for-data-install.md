@@ -55,7 +55,7 @@ For IBM Cloud Pak for Data Cloud Native Edition, search part number CC2HVEN and 
 
 2. Create a configmap file using the cmg.bin file by running the following command:
 ```bash
-chmod +x cmg.bin && ./cmg.bin -p Intel -s analytics-zoo-analytics-zoo -n zen -v 0.5.1 -u /tree?token=1234qwer
+chmod +x cmg.bin && ./cmg.bin -p analytics-zoo -s analytics-zoo-analytics-zoo -n zen -v 0.5.1 -c http://Your_Cluster_Address:Analytics_Zoo_NodePort/tree?token=1234qwer
 ```
 Then you'll get a config map yaml file.
 
