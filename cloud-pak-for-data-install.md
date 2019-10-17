@@ -44,38 +44,14 @@ kubectl describe svc analytics-zoo-analytics-zoo -n zen
 ```
 From the output of above command, you can find the NodePort of the service. You can use this port to access analytics zoo service in web browser. 
 
-## **Enable Analytics Zoo Add-on**
-1. Download cmg.bin file from IBM website:
-
-Navigate to this link, and login as a customer: https://www.ibm.com/software/passportadvantage/pao_customer.html
-   
-For IBM Cloud Pak for Data Enterprise Edition, search for part number CC2HNEM and download file
-
-For IBM Cloud Pak for Data Cloud Native Edition, search part number CC2HVEN and download file
-
-2. Create a configmap file using the cmg.bin file by running the following command:
-```bash
-chmod +x cmg.bin && ./cmg.bin -p analytics-zoo -s analytics-zoo-analytics-zoo -n zen -v 0.5.1 -c http://Your_Cluster_Address:Analytics_Zoo_NodePort/tree?token=1234qwer
-```
-Then you'll get a config map yaml file.
-
-3. Use the generated config map in the following commmand on the Cloud Pak for Data Cluster:
-```bash
-kubectl create -f 
-```
-4. Verify if the Analytics Zoo add-on tile is enabled on the Cloud Pak for Data UI with 'Open' link and also the version number is 0.5.1.
-
 ## Using Analytics Zoo
-After you enable the Analytics Zoo add-on, you can click "Open" link in the Analytics Zoo Add-on page, then you'll see the Jupyter notebook with analytics zoo. 
+After you install the Analytics Zoo add-on, you can input http://Your_Cluster_Address:Analytics_Zoo_NodePort/tree?token=1234qwer in the web browser, then you'll see the Jupyter notebook with analytics zoo. 
 
 You can find many use cases/examples under current directory. Click one example and follow the README to open one notebook to run. 
 
 Or you can create your own notebook with Analytics Zoo APIs to do your deep learning analytics. 
 
 To get the detail information of how to use analytics zoo, please check [Analytics Zoo documentation](https://analytics-zoo.github.io)
-
-## **Disable Analytics Zoo Add-on**
-If you want to disable the Analytics Zoo add-on in your Cloud Pak for Data cluster, please do the following steps:
 
 ## **Uninstall Analytics Zoo Add-on**
 To uninstall/delete the analytics-zoo deployment:
