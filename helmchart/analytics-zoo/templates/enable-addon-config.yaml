@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.addon.id}}-{{ .Values.addon.version}}-configmap
+  labels:
+    icpdata_addon: "true"
+data:
+  add-ons.json: |
+   { "{{ .Values.addon.id }}":{ "details":{ "openURL":"{{ .Values.addon.openUrl }}" }, "versions":{ "{{ .Values.addon.version }}":{ "state":"enabled" } } } }
