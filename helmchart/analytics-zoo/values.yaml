@@ -55,6 +55,7 @@ Persistence:
   Size: 10G
   ## Set default PVC access mode: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
   AccessMode: ReadWriteOnce
-addon.version: 0.5.1
-addon.openUrl: http://ada-analytics-zoo-zen.zen-cpd-zen.apps.p-aurora.ibmplayground.com
-addon.id: analytics-zoo
+addon:
+  version: 0.5.1
+  openUrl: http://ada-analytics-zoo-zen.zen-cpd-zen.apps.p-aurora.ibmplayground.com
+  id: analytics-zoo
