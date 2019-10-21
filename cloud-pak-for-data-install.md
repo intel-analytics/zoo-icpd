@@ -42,10 +42,16 @@ kubectl describe pod <the_pod_it_made> -n zen
 ```bash
 kubectl describe svc analytics-zoo-analytics-zoo -n zen
 ```
-From the output of above command, you can find the NodePort of the service. You can use this port to access analytics zoo service in web browser. 
+4. Create route to expose service
+Analytics Zoo service can be exposed by creating a route with such command:
+```bash
+oc expose service analytics-zoo-analytics-zoo  --name=analytics-zoo-addon
+```
+So the Analytics Zoo addon service can be accessed with URL:
+http://analytics-zoo-addon-zen.Public_Hostname_Of_The_Cluster
 
 ## Using Analytics Zoo
-After you install the Analytics Zoo add-on, you can input http://Your_Cluster_Address:Analytics_Zoo_NodePort/tree?token=1234qwer in the web browser, then you'll see the Jupyter notebook with analytics zoo. 
+After you install the Analytics Zoo add-on, you can click "Open" link in the Analytics Zoo Add-on page, then you'll see the Jupyter notebook with Analytics Zoo. 
 
 You can find many use cases/examples under current directory. Click one example and follow the README to open one notebook to run. 
 
