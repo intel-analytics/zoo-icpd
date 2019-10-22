@@ -7,3 +7,8 @@ metadata:
 data:
   add-ons.json: |
    { "{{ .Values.addon.id }}":{ "details":{ "openURL":"{{ .Values.addon.openUrl }}" }, "versions":{ "{{ .Values.addon.version }}":{ "state":"enabled" } } } }
+nginx.conf: |
+    location /{{ .Values.addon.id}}-{{ .Values.addon.version }}/ {
+        access_by_lua_file /nginx_data/checkjwt.lua;
+        proxy_set_header Host $host;
+    }
