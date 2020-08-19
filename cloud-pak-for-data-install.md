@@ -31,7 +31,7 @@ cd zoo-icpd/helmchart/analytics-zoo
 ```
 3. Install the helmchart archive:
 ```bash
-helm install . --name analytics-zoo --namespace zen --tls
+helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --tls
 ```
 Run the following kubectl commands to verify the deployment.
 ```bash
