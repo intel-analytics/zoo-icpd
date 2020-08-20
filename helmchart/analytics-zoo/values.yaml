@@ -57,5 +57,4 @@ Persistence:
   AccessMode: ReadWriteOnce
 addon:
   version: 0.5.1
-  #openUrl: http://analytics-zoo-addon-zen.apps.p-aurora.ibmplayground.com/tree?token=1234qwer
   id: analytics-zoo

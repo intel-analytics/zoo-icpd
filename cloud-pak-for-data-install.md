@@ -8,7 +8,8 @@ To deploy Analytics Zoo on Cloud Pak for Data, the following prerequisites must 
 2. Having sufficient privileges to that cluster so that you can run kubectl/helm and log in to the Cloud Pak for Data internal docker registry.How to do this is described in the [Cloud Pak for Data Documentations](https://docs-icpdata.mybluemix.net/docs/content/SSQNUZ_current/com.ibm.icpdata.doc/zen/overview/overview.html)
 3. The Analytics Zoo add-on is already bundled with required software which is enough for running deep-learning pipeline in Spark local mode. If you want to connect to another Spark cluster to do the AI pipeline with Analytics Zoo, please make sure it satisfies the software requirement including Spark 2.3.2, Python 3.6+, numpy<=1.14.5,>=1.13.3, tensorflow 1.10 on the cluster.
 4. The minimum CPU requirement is 4 core.
-5. The minimum memory request is 20G. 
+5. The minimum memory request is 20G.
+6. Setup helm by following 'Helm utility configuration' part in "CPD Openshift Cluster Remote Access" documentation from [Help Documentation](https://ibmplayground.com/partner/help/external). 
 
 ## **Work Flow**
 Deploying Analytics Zoo on IBM Cloud Pak for Data uses the following workflow:
