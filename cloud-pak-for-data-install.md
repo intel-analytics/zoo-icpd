@@ -19,6 +19,8 @@ Deploying Analytics Zoo on IBM Cloud Pak for Data uses the following workflow:
 3. You are then forwarded in your browser to this page (the one you are reading).
 
 ## **Installation**
+
+### **To install the service on a cluster that can connect to the internet**
 Follow the steps to have the Analytics Zoo up and running on your cluster.
 
 1.  SSH to the Cloud Pak for Data cluster
@@ -34,6 +36,60 @@ cd zoo-icpd/helmchart/analytics-zoo
 ```bash
 helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --tls
 ```
+### **To install the service on an air-gapped cluster**
+
+1. For cluster admininstrator, pre-download image and push to internal cluster registry.
+
+    a. Download analytics zoo image with such command:
+    ```bash
+    docker pull intelanalytics/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd
+    ```
+    b. Log in to the oc command-line interface before push the image:
+    ```bash
+    oc login
+    ```
+    c. Login to internal registry server.
+    
+    To check the route of internal docker registry, run this command:
+    ```bash
+    oc get route/docker-registry -n default --template {{.spec.host}}
+    ```
+    The command returns a route similar to docker-registry-default.apps.my_cluster_address.
+    
+    Then, login to this internal docker registry route:
+    ```bash
+    docker login -u <oc admin login user> -p <oc admin docker registry password> docker-registry-default.apps.my_cluster_address
+    ```
+    "oc admin docker registry password" would be the output of "oc whoami -t"
+    
+    d. Push analytics zoo image to internal registry.
+    ```bash
+    docker tag intelanalytics/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd docker-registry-default.apps.my_cluster_address/zen/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd
+    docker push docker-registry-default.apps.my_cluster_address/zen/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd
+    ```
+2. For user who will install analytics zoo add-on,
+        
+    a.  SSH to access node of the Cloud Pak for Data cluster
+    ```
+    ssh root@<cloud-pak-for-data-cluster-master-node>
+    ```
+    b. Clone the github repository intel-analytics/zoo-icpd to receive a copy of the helmchart. Browse to the helm charts directory.
+    ```bash
+    git clone https://github.com/intel-analytics/zoo-icpd.git
+    cd zoo-icpd/helmchart/analytics-zoo
+    ```
+    c. Get the internal name of the Red Hat OpenShift registry service:
+    ```bash
+    oc registry info
+    ```
+    The command returns a registry service similar to docker-registry.default.svc:5000
+    
+    d. Install the helmchart archive by pulling from internal registry:
+    ```bash
+    helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --set Image=docker-registry.default.svc:5000/zen/analytics-zoo --tls
+    ```
+
+### **Verify Analytics Zoo depolyment**
 Run the following kubectl commands to verify the deployment.
 ```bash
 kubectl get svc -n zen|grep analytics-zoo
@@ -43,7 +99,7 @@ kubectl describe pod <the_pod_it_made> -n zen
 ```bash
 kubectl describe svc analytics-zoo-analytics-zoo -n zen
 ```
-4. Create route to expose service
+### **Create route to expose Analytics Zoo service**
 Analytics Zoo service can be exposed by creating a route with such command:
 ```bash
 oc expose service analytics-zoo-analytics-zoo  --name=analytics-zoo-addon

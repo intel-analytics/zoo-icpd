@@ -5,7 +5,7 @@
 Name: analytics-zoo
 Image: "intelanalytics/analytics-zoo"
 ImageTag: "0.5.1-2.3.1-0.8.0-py3-icpd"
-PullPolicy: Always
+PullPolicy: IfNotPresent
 Replicas: 1
 Component: "analytics-zoo"
 Cpu: "4"
