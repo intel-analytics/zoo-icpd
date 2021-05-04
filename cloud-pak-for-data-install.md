@@ -69,24 +69,25 @@ helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://a
     ```
 2. For user who will install analytics zoo add-on,
         
-    a.  SSH to access node of the Cloud Pak for Data cluster
-    ```
-    ssh root@<cloud-pak-for-data-cluster-master-node>
-    ```
-    b. Clone the github repository intel-analytics/zoo-icpd to receive a copy of the helmchart. Browse to the helm charts directory.
+    a. Clone the github repository intel-analytics/zoo-icpd to receive a copy of the helmchart. Browse to the helm charts directory.
     ```bash
     git clone https://github.com/intel-analytics/zoo-icpd.git
     cd zoo-icpd/helmchart/analytics-zoo
     ```
-    c. Get the internal name of the Red Hat OpenShift registry service:
+    b. Get the internal name of the Red Hat OpenShift registry service:
     ```bash
     oc registry info
     ```
     The command returns a registry service similar to docker-registry.default.svc:5000
     
-    d. Install the helmchart archive by pulling from internal registry:
+    c. Install the helmchart archive by pulling from internal registry:
+    Helm v1-2
     ```bash
     helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --set Image=docker-registry.default.svc:5000/zen/analytics-zoo --tls
+    ```
+    Helm v3
+    ```
+    helm upgrade --install --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer analytics-zoo .
     ```
 
 ### **Verify Analytics Zoo depolyment**
