@@ -34,7 +34,7 @@ cd zoo-icpd/helmchart/analytics-zoo
 ```
 3. Install the helmchart archive:
 ```bash
-helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --tls
+helm install --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer analytics-zoo .
 ```
 ### **To install the service on an air-gapped cluster**
 
@@ -67,29 +67,25 @@ helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://a
     docker tag intelanalytics/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd docker-registry-default.apps.my_cluster_address/zen/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd
     docker push docker-registry-default.apps.my_cluster_address/zen/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd
     ```
-2. For user who will install analytics zoo add-on,
-        
-    a.  SSH to access node of the Cloud Pak for Data cluster
-    ```
-    ssh root@<cloud-pak-for-data-cluster-master-node>
-    ```
-    b. Clone the github repository intel-analytics/zoo-icpd to receive a copy of the helmchart. Browse to the helm charts directory.
+2. For user who will install analytics zoo add-on.
+
+    a. Clone the github repository intel-analytics/zoo-icpd to receive a copy of the helmchart. Browse to the helm charts directory.
     ```bash
     git clone https://github.com/intel-analytics/zoo-icpd.git
     cd zoo-icpd/helmchart/analytics-zoo
     ```
-    c. Get the internal name of the Red Hat OpenShift registry service:
+    b. Get the internal name of the Red Hat OpenShift registry service:
     ```bash
     oc registry info
     ```
-    The command returns a registry service similar to docker-registry.default.svc:5000
+    The command returns a registry service similar to `docker-registry.default.svc:5000`
     
-    d. Install the helmchart archive by pulling from internal registry:
+    c. Install the helmchart archive by pulling from internal registry:
     ```bash
-    helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --set Image=docker-registry.default.svc:5000/zen/analytics-zoo --tls
+    helm install --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --set Image=<image-registry.default.svc:5000>/zen/analytics-zoo analytics-zoo .
     ```
 
-### **Verify Analytics Zoo depolyment**
+### **Verify Analytics Zoo deployment**
 Run the following kubectl commands to verify the deployment.
 ```bash
 kubectl get svc -n zen|grep analytics-zoo
@@ -119,5 +115,5 @@ To get the detail information of how to use analytics zoo, please check [Analyti
 ## **Uninstall Analytics Zoo Add-on**
 To uninstall/delete the analytics-zoo deployment:
 ```bash
-helm delete --purge analytics-zoo --tls
+helm uninstall analytics-zoo -n zen
 ```
