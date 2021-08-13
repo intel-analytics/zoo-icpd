@@ -124,7 +124,7 @@ There are two ways to create routes based on different protocols,one way is to c
     ```
 
 So the Analytics Zoo addon service can be accessed with URL:
-http://analytics-zoo-addon-zen.Public_Hostname_Of_The_Cluster
+https://analytics-zoo-addon-zen.Public_Hostname_Of_The_Cluster
 
 ## Using Analytics Zoo
 After you install the Analytics Zoo add-on, you can click "Open" link in the Analytics Zoo Add-on page, then you'll see the Jupyter notebook with Analytics Zoo. 
