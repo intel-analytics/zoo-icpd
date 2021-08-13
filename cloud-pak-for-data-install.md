@@ -111,7 +111,8 @@ There are two ways to create routes based on different protocols,one way is to c
     ```bash
     oc get secrets -n openshift-ingress
     ```
-    ![example](./example.png)
+    <img src="example.png" alt="example" width="600px" height="200px" align="middle"/>
+
     b. Generate the secret in a temporary directory:
     ```bash
     oc extract secret/<YOUR-TLS-SECRET-NAME> --to=./ -n openshift-ingress
