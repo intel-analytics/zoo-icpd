@@ -34,7 +34,7 @@ cd zoo-icpd/helmchart/analytics-zoo
 ```
 3. Install the helmchart archive:
 ```bash
-helm install --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer analytics-zoo .
+helm install --namespace zen --set addon.openUrl=https://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer analytics-zoo .
 ```
 ### **To install the service on an air-gapped cluster**
 
@@ -82,7 +82,7 @@ helm install --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.
     
     c. Install the helmchart archive by pulling from internal registry:
     ```bash
-    helm install --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --set Image=<image-registry.default.svc:5000>/zen/analytics-zoo analytics-zoo .
+    helm install --namespace zen --set addon.openUrl=https://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --set Image=<image-registry.default.svc:5000>/zen/analytics-zoo analytics-zoo .
     ```
 
 ### **Verify Analytics Zoo deployment**
@@ -96,10 +96,32 @@ kubectl describe pod <the_pod_it_made> -n zen
 kubectl describe svc analytics-zoo-analytics-zoo -n zen
 ```
 ### **Create route to expose Analytics Zoo service**
-Analytics Zoo service can be exposed by creating a route with such command:
-```bash
-oc expose service analytics-zoo-analytics-zoo  --name=analytics-zoo-addon
-```
+There are two ways to create routes based on different protocols,one way is to create a route based on the http protocol in a simple way, and the other is to create an edge route to implement https.
+
+1. create a route based on http protocol
+
+    Analytics Zoo service can be exposed by creating a route with such command:
+    ```bash
+    oc expose service analytics-zoo-analytics-zoo -n zen  --name=analytics-zoo-addon
+    ```
+
+2. Create a route based on https protocol
+
+    a. You need the kubernetes.io/tls type TLS secret that’s generated for your cluster:
+    ```bash
+    oc get secrets -n openshift-ingress
+    ```
+    ![example](./example.png)
+    b. Generate the secret in a temporary directory:
+    ```bash
+    oc extract secret/<YOUR-TLS-SECRET-NAME> --to=./ -n openshift-ingress
+    ```
+
+    c. Create route with generated secret files.
+    ```bash
+    oc create route edge analytics-zoo-addon --service analytics-zoo-analytics-zoo --namespace zen --key ./tls.key --cert ./tls.crt
+    ```
+
 So the Analytics Zoo addon service can be accessed with URL:
 http://analytics-zoo-addon-zen.Public_Hostname_Of_The_Cluster
 
