@@ -34,7 +34,7 @@ cd zoo-icpd/helmchart/analytics-zoo
 ```
 3. Install the helmchart archive:
 ```bash
-helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --tls
+helm install --namespace zen --set addon.openUrl=https://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer analytics-zoo .
 ```
 ### **To install the service on an air-gapped cluster**
 
@@ -67,29 +67,25 @@ helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://a
     docker tag intelanalytics/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd docker-registry-default.apps.my_cluster_address/zen/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd
     docker push docker-registry-default.apps.my_cluster_address/zen/analytics-zoo:0.5.1-2.3.1-0.8.0-py3-icpd
     ```
-2. For user who will install analytics zoo add-on,
-        
-    a.  SSH to access node of the Cloud Pak for Data cluster
-    ```
-    ssh root@<cloud-pak-for-data-cluster-master-node>
-    ```
-    b. Clone the github repository intel-analytics/zoo-icpd to receive a copy of the helmchart. Browse to the helm charts directory.
+2. For user who will install analytics zoo add-on.
+
+    a. Clone the github repository intel-analytics/zoo-icpd to receive a copy of the helmchart. Browse to the helm charts directory.
     ```bash
     git clone https://github.com/intel-analytics/zoo-icpd.git
     cd zoo-icpd/helmchart/analytics-zoo
     ```
-    c. Get the internal name of the Red Hat OpenShift registry service:
+    b. Get the internal name of the Red Hat OpenShift registry service:
     ```bash
     oc registry info
     ```
-    The command returns a registry service similar to docker-registry.default.svc:5000
+    The command returns a registry service similar to `docker-registry.default.svc:5000`
     
-    d. Install the helmchart archive by pulling from internal registry:
+    c. Install the helmchart archive by pulling from internal registry:
     ```bash
-    helm install . --name analytics-zoo --namespace zen --set addon.openUrl=http://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --set Image=docker-registry.default.svc:5000/zen/analytics-zoo --tls
+    helm install --namespace zen --set addon.openUrl=https://analytics-zoo-addon-zen.<public_host_name_of_the_cluster>/tree?token=1234qwer --set Image=<image-registry.default.svc:5000>/zen/analytics-zoo analytics-zoo .
     ```
 
-### **Verify Analytics Zoo depolyment**
+### **Verify Analytics Zoo deployment**
 Run the following kubectl commands to verify the deployment.
 ```bash
 kubectl get svc -n zen|grep analytics-zoo
@@ -100,12 +96,35 @@ kubectl describe pod <the_pod_it_made> -n zen
 kubectl describe svc analytics-zoo-analytics-zoo -n zen
 ```
 ### **Create route to expose Analytics Zoo service**
-Analytics Zoo service can be exposed by creating a route with such command:
-```bash
-oc expose service analytics-zoo-analytics-zoo  --name=analytics-zoo-addon
-```
+There are two ways to create routes based on different protocols,one way is to create a route based on the http protocol in a simple way, and the other is to create an edge route to implement https.
+
+1. create a route based on http protocol
+
+    Analytics Zoo service can be exposed by creating a route with such command:
+    ```bash
+    oc expose service analytics-zoo-analytics-zoo -n zen  --name=analytics-zoo-addon
+    ```
+
+2. Create a route based on https protocol
+
+    a. You need the kubernetes.io/tls type TLS secret that’s generated for your cluster:
+    ```bash
+    oc get secrets -n openshift-ingress
+    ```
+    <img src="example.png" alt="example" width="600px" height="200px" align="middle"/>
+
+    b. Generate the secret in a temporary directory:
+    ```bash
+    oc extract secret/<YOUR-TLS-SECRET-NAME> --to=./ -n openshift-ingress
+    ```
+
+    c. Create route with generated secret files.
+    ```bash
+    oc create route edge analytics-zoo-addon --service analytics-zoo-analytics-zoo --namespace zen --key ./tls.key --cert ./tls.crt
+    ```
+
 So the Analytics Zoo addon service can be accessed with URL:
-http://analytics-zoo-addon-zen.Public_Hostname_Of_The_Cluster
+https://analytics-zoo-addon-zen.Public_Hostname_Of_The_Cluster
 
 ## Using Analytics Zoo
 After you install the Analytics Zoo add-on, you can click "Open" link in the Analytics Zoo Add-on page, then you'll see the Jupyter notebook with Analytics Zoo. 
@@ -119,5 +138,5 @@ To get the detail information of how to use analytics zoo, please check [Analyti
 ## **Uninstall Analytics Zoo Add-on**
 To uninstall/delete the analytics-zoo deployment:
 ```bash
-helm delete --purge analytics-zoo --tls
+helm uninstall analytics-zoo -n zen
 ```
